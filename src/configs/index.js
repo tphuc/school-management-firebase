@@ -1,0 +1,6 @@
+const DEFAULT_PASSWORD = '123456'
+
+
+export { 
+    DEFAULT_PASSWORD
+}

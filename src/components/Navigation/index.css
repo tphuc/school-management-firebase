@@ -1,0 +1,7 @@
+.nav-item{
+    padding: 8px 10px;
+    height: auto;
+    margin:5px;
+    border-radius:5px;
+    transition: 0.4s ease all;
+}

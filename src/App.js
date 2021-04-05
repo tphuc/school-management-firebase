@@ -1,24 +1,27 @@
 import logo from './logo.svg';
 import './App.css';
+import { Switch, BrowserRouter, Route, Redirect } from 'react-router-dom';
+import React from 'react';
+import Login from './pages/Login';
+import Home from './pages/Home';
+import AdminDashboard from './pages/AdminDashboard';
+import { GeistProvider, CssBaseline } from '@geist-ui/react'
+import StudentDashoard from './pages/StudentDashboard';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <GeistProvider>
+       <CssBaseline />
+    <BrowserRouter>
+    <Switch>
+      <Route exact path='/login' component={Login} />
+      <Route exact path='/' component={Home} />
+      <Route path='/admin-dashboard' component={AdminDashboard} />
+      <Route path='/student-dashboard' component={StudentDashoard} />
+      </Switch>
+      
+    </BrowserRouter>
+    </GeistProvider>
   );
 }
 

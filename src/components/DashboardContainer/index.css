@@ -1,0 +1,7 @@
+.dashboard-sidebar{
+    width: 200px;
+    min-height: 100vh;
+    padding: 10px;
+    user-select: none;
+    border-right: 1px solid #eee;
+}

@@ -1,0 +1,112 @@
+{
+    "classes": {
+        "CL1": {
+            "STD1": true
+        },
+        "CL2":{
+            "STD2": true
+        }
+    },
+
+    "students":{
+        "STD1" : {
+            "name": "",
+            "phone": "",
+            "class": "CL1",
+            "course_enrolment":{
+                "CR1": true
+            },
+            "course_request":{
+                "CR2": true
+            },
+            "course_score": {
+                "CR1": 10
+            },
+            "course_attendance":{
+                "CR1": {
+                    "18/12/2021": true
+                }
+            }
+        },
+        "STD2" : {
+            "name": "",
+            "phone": "",
+            "class": "CL2",
+            "course_enrolment":{
+                "CR2": true
+            },
+            "course_request":{
+                "CR1": true
+            },
+            "course_score": {
+                "CR2": 10
+            },
+            "course_attendance":{
+                "CR2": {
+                    "18/12/2021": true
+                }
+            }
+        }
+    },
+
+    "teachers":{
+        "TCH1": {
+            "name": "",
+            "phone": "",
+            "course_enrolment":{
+                "CR1": true
+            }   
+        },
+        "TCH2": {
+            "name": "",
+            "phone": "",
+            "course_enrolment":{
+                "CR2": true
+            }
+        }
+    },
+
+
+    "courses": {
+        "CR1":{
+            "name": "course 1",
+            "description": "",
+            "lecturer": "TCH1",
+            "student_attendance": {
+                "18/12/2021": {
+                    "STD1": true
+                }
+            },
+            "student_enrolment": {
+                "STD1": true
+            },
+            "student_request": {
+                "STD2": true
+            },
+            "student_score":{
+                "STD1": 10
+            }
+        },
+        "CR2":{
+            "name": "course 2",
+            "description": "",
+            "lecturer": "TCH2",
+            "student_attendance": {
+                "18/12/2021": {
+                    "STD2": true
+                }
+            },
+            "student_enrolment": {
+                "STD2": true
+            },
+            "student_request": {
+                "STD1": true
+            },
+            "student_score":{
+                "STD2": 10
+            }
+        }
+    }
+
+   
+}
