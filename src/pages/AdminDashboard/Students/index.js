@@ -53,7 +53,7 @@ function Students() {
               })
         });
         if(res?.user){
-            StudentService.add({
+            StudentService.add(res.user.uid, {
                 user_id: res.user.uid,
                 phone_number: res.user.phoneNumber,
                 email: res.user.email,
@@ -122,7 +122,7 @@ function Students() {
                     <Spacer y={1}/>
                     <Description title='ID' content={data?.selected?.code} />
                     <Spacer y={1}/>
-                    <Description title='Class' content={_.get(data?.json_classes[_.get(data?.selected, 'class')], 'name')} />
+                    <Description title='Class' content={_.get(_.get(data?.json_classes, _.get(data?.selected, 'class')), 'name')} />
                     <br/>
                     
                     

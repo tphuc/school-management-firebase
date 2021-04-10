@@ -54,7 +54,7 @@ function Teachers() {
               })
         });
         if(res?.user){
-            TeacherService.add({
+            TeacherService.add(res.user.uid, {
                 user_id: res.user.uid,
                 phone_number: res.user.phoneNumber,
                 email: res.user.email,

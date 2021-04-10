@@ -32,11 +32,10 @@ class StudentService {
         return db.ref().child('students').get()
     }
 
-    static add = async (data, callback) => {
-        var newKey = await db.ref().child('students').push().key;
+    static add = async (id, data, callback) => {
         var updates = {}
-        updates[`/students/${newKey}`] = data;
-        updates[`/classes/${data.class}/${newKey}`] = true 
+        updates[`/students/${id}`] = data;
+        updates[`/classes/${data.class}/${id}`] = true 
         return db.ref().update(updates, callback)
     }
 
@@ -60,10 +59,9 @@ class TeacherService {
         return db.ref().child('teachers').get()
     }
 
-    static add = async (data, callback) => {
-        var newKey = await db.ref().child('teachers').push().key;
+    static add = async (id, data, callback) => {
         var updates = {}
-        updates[`/teachers/${newKey}`] = data;
+        updates[`/teachers/${id}`] = data;
         return db.ref().update(updates, callback)
     }
 
@@ -76,6 +74,10 @@ class CourseService {
 
     static getAll = async () => {
         return db.ref().child('courses').get();
+    }
+
+    static getById = async (id) => {
+        return db.ref().child('courses').child(id).get();
     }
 
     static add = async (data, callback) => {
@@ -94,6 +96,10 @@ class CourseService {
         var updates = {}
         updates[`/courses/${id}/student_enrolment/${studentId}`] = data;
         return db.ref().update(updates, callback)
+    }
+
+    static getEnroledStudents = async (id) => {
+        return db.ref().child('courses').child(id).child('student_enrolment').get();
     }
 }
 

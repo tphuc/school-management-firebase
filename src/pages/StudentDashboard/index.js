@@ -2,6 +2,7 @@ import React from 'react';
 import { Route, Switch, useHistory } from 'react-router-dom';
 import DashboardContainer from '../../components/DashboardContainer';
 import { auth } from '../../services/firebase';
+import CourseDetail from './CourseDetail';
 import Enrolment from './Enrolment';
 import MyCourses from './MyCourses';
 
@@ -19,7 +20,7 @@ export default function StudentDashoard(){
         header='Student'
         items={[
             {
-                title:"Courses",
+                title:"My courses",
                 itemId:"/student-dashboard/courses",
                 route:"/student-dashboard/courses",
             },
@@ -32,8 +33,9 @@ export default function StudentDashoard(){
         ]}
     >
         <Switch>
-            <Route path='/student-dashboard/courses' component={MyCourses} />
+            <Route exact path='/student-dashboard/courses' component={MyCourses} />
             <Route path='/student-dashboard/enrolment' component={Enrolment} />
+            <Route path='/student-dashboard/courses/:id' component={CourseDetail} />
         </Switch>
     </DashboardContainer>
 }
