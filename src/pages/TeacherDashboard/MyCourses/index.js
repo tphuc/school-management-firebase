@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Card, Container, Link, Grid, Input, Page, Spacer, Text, Table, useToasts, Modal } from '@geist-ui/react'
 import { useHistory, useLocation } from 'react-router';
-import { ClassService, StudentService } from '../../../services';
+import { ClassService, StudentService, TeacherService } from '../../../services';
 import { JsonToList, parseTableData } from '../../../utils';
 import { CheckInCircleFill, Plus } from '@geist-ui/react-icons';
 import DynamicForm from '../../../components/DynamicForm';
@@ -23,9 +23,11 @@ function MyCourses() {
     let query = useQuery();
 
     const fetchData = async () => {
-        console.log(auth?.currentUser?.uid)
-        let res = await StudentService.getEnrolCourse(auth?.currentUser?.uid);
-        console.log(res.val())
+        console.log(26, auth?.currentUser?.uid)
+        if(!auth?.currentUser?.uid){
+            return
+        }
+        let res = await TeacherService.getEnrolCourse(auth?.currentUser?.uid);
         setData(prev => ({
             ...prev,
             courses: JsonToList(res.val())
@@ -42,7 +44,6 @@ function MyCourses() {
 
     return (
         <div >
-
             <br />
             <Spacer y={1} />
             {data.courses.map(item => <Card>
@@ -51,7 +52,7 @@ function MyCourses() {
                     <br/>
                     <Text >{item.code}</Text>
                     <br/>
-                    <Button size='small'  type='secondary-light' block onClick={() => history.push(`/student-dashboard/courses/${item.id}`)}>View</Button>
+                    <Button size='small'  type='secondary-light' block onClick={() => history.push(`/teacher-dashboard/courses/${item.id}`)}>View</Button>
                 </Card.Content>
             </Card>)}
 

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Card, Container, Select, Grid, Description, Spacer, Text, Table, useToasts, Modal } from '@geist-ui/react'
 import { useHistory, useLocation } from 'react-router';
-import { ClassService, CourseService, StudentService, UserService } from '../../../services';
+import { ClassService, CourseService, StudentService, TeacherService, UserService } from '../../../services';
 import { JsonToList, parseTableData } from '../../../utils';
 import { CheckInCircleFill, Plus } from '@geist-ui/react-icons';
 import DynamicForm from '../../../components/DynamicForm';
@@ -18,13 +18,15 @@ function Courses() {
     })
 
     const [form, setForm] = useState({
-        students: []
+        students: [],
+        teachers: []
     })
 
     const [data, setData] = useState({
-        selected:null,
+        selected: null,
         courses: [],
-        students: []
+        students: [],
+        teachers: []
     });
     let query = useQuery();
 
@@ -45,11 +47,20 @@ function Courses() {
         }))
     }
 
+    const fetchTeachers = async () => {
+        let res = await TeacherService.getAll();
+        setData(prev => ({
+            ...prev,
+            teachers: JsonToList(res.val())
+        }))
+    }
+
 
 
     React.useEffect(() => {
         fetchData();
         fetchStudents();
+        fetchTeachers();
     }, [])
 
 
@@ -87,21 +98,48 @@ function Courses() {
         })
     }
 
+    const onSelect = async (row) => {
+        let res = await CourseService.getById(row.id);
+        setData(prev => ({ ...prev, selected: res.val() }));
+    }
+
     // ----- Course Info -----
     const addStudents = async () => {
         let students = [...form.students];
         const res = await Promise.all(students.map(async (student) => {
             let courseRes = await CourseService.addStudent(data?.selected?.id, student?.id, student, err => {
-                if(err){
+                if (err) {
                     return;
                 }
-                else{
-                    let { operation, ...others} = data.selected;
+                else {
+                    let { operation, ...others } = data.selected;
                     // console.log(student.id, data?.selected?.id, data?.selected);
-                    StudentService.addEnrolCourse(student.id, data?.selected?.id, others,  err => console.log(err?.message))
+                    StudentService.addEnrolCourse(student.id, data?.selected?.id, others, err => console.log(err?.message))
                 }
             })
-           
+
+
+        }))
+        fetchData();
+        setForm({
+            students: []
+        })
+    }
+
+    const addTeachers = async () => {
+        let teachers = [...form.teachers];
+        const res = await Promise.all(teachers.map(async (teacher) => {
+            let courseRes = await CourseService.addLecturer(data?.selected?.id, teacher?.id, teacher, err => {
+                if (err) {
+                    return;
+                }
+                else {
+                    let { operation, ...others } = data.selected;
+                    // console.log(teacher.id, data?.selected?.id, data?.selected);
+                    TeacherService.addEnrolCourse(teacher.id, data?.selected?.id, others, err => console.log(err?.message))
+                }
+            })
+
 
         }))
         fetchData();
@@ -118,8 +156,9 @@ function Courses() {
             <Grid.Container gap={2}>
                 <Grid xs={24} md={12}>
                     <Table onRow={(row) => {
-                        console.log(row)
-                        setData(prev => ({ ...prev, selected: row }));
+                        onSelect(row)
+
+                        
                     }} data={parseTableData(data.courses, (action, data) => {
                         if (action == 'remove') {
                             if (window.confirm('Do you want to continue?'))
@@ -139,26 +178,53 @@ function Courses() {
                         <Description title='Code' content={data.selected?.code} />
                         <br />
                         <span>Students</span>
-                        <div style={{display:"flex", justifyContent:"space-between", flexDirection:"row"}}>
-                        <Select multiple clearable width='100%' size='small'  placeholder={'Add students'}
-                        value={form.students}
-                        onChange={(val) => setForm({
-                            students: val
-                        })}
-                        >
-                            {data?.students?.map((item, id) => <Select.Option key={id} value={item}>{item.code} - {item.name} </Select.Option>)}
-                        </Select>
-                        <Button disabled={!data?.selected} onClick={addStudents} type='secondary-light' iconRight={<Plus/>} auto style={{float:"right", marginLeft:5}}>Add</Button>
+                        <div style={{ display: "flex", justifyContent: "space-between", flexDirection: "row" }}>
+                            <Select multiple clearable width='100%' size='small' placeholder={'Add students'}
+                                value={form.students}
+                                onChange={(val) => setForm({
+                                    students: val
+                                })}
+                            >
+                                {data?.students?.map((item, id) => <Select.Option key={id} value={item}>{item.code} - {item.name} </Select.Option>)}
+                            </Select>
+                            <Button disabled={!data?.selected} onClick={addStudents} type='secondary-light' iconRight={<Plus />} auto style={{ float: "right", marginLeft: 5 }}>Add</Button>
                         </div>
                         <Spacer y={0.4} />
                         <Table data={parseTableData(JsonToList(data?.selected?.student_enrolment), (action, data) => {
                             if (action == 'remove') {
 
-                        }})} onRow={(row) => { }}>
+                            }
+                        })} onRow={(row) => { }}>
                             <Table.Column prop="code" label="code" />
                             <Table.Column prop="name" label="name" />
                             <Table.Column prop="operation" label="-" />
                         </Table>
+                        <br />
+                        {/* ------------- Teachers --------------- */}
+                        <span>Teachers</span>
+                        <div style={{ display: "flex", justifyContent: "space-between", flexDirection: "row" }}>
+                            <Select multiple clearable width='100%' size='small' placeholder={'Add students'}
+                                value={form.teachers}
+                                onChange={(val) => setForm({
+                                    teachers: val
+                                })}
+                            >
+                                {data?.teachers?.map((item, id) => <Select.Option key={id} value={item}>{item.code} - {item.name} </Select.Option>)}
+                            </Select>
+                            <Button disabled={!data?.selected} onClick={addTeachers} type='secondary-light' iconRight={<Plus />} auto style={{ float: "right", marginLeft: 5 }}>Add</Button>
+                        </div>
+                        <Spacer y={0.4} />
+                        <Table data={parseTableData(JsonToList(data?.selected?.lecturers), (action, data) => {
+                            if (action == 'remove') {
+
+                            }
+                        })} onRow={(row) => { }}>
+                            <Table.Column prop="code" label="code" />
+                            <Table.Column prop="name" label="name" />
+                            <Table.Column prop="operation" label="-" />
+                        </Table>
+
+
 
 
                     </Card>

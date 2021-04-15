@@ -44,7 +44,7 @@ class StudentService {
     }
 
     static getEnrolCourse = async (id) => {
-        return db.ref().child('/students').child(id).child('course_enrolment').get()
+        return db.ref().child('students').child(id).child('course_enrolment').get()
     }
 
     static addEnrolCourse = async (id, courseId, data, callback) => {
@@ -68,6 +68,18 @@ class TeacherService {
     static del = async (id, callback) => {
         return db.ref(`/teachers/${id}`).remove(callback)
     }
+
+    static getEnrolCourse = async (id) => {
+        return db.ref().child('teachers').child(id).child('course_enrolment').get()
+    }
+
+    static addEnrolCourse = async (id, courseId, data, callback) => {
+        var updates = {}
+        updates[`/teachers/${id}/course_enrolment/${courseId}`] = data;
+        return db.ref().update(updates, callback)
+    }
+
+    
 }
 
 class CourseService {
@@ -98,8 +110,42 @@ class CourseService {
         return db.ref().update(updates, callback)
     }
 
+    static removeStudent = async (id, teacherId, callback) => {
+        return db.ref().remove(`/courses/${id}/student_enrolment/${teacherId}`, callback)
+    }
+
     static getEnroledStudents = async (id) => {
         return db.ref().child('courses').child(id).child('student_enrolment').get();
+    }
+
+    static addLecturer = async (id, teacherId, data, callback) => {
+        var updates = {}
+        updates[`/courses/${id}/lecturers/${teacherId}`] = data;
+        return db.ref().update(updates, callback)
+    }
+
+    static removeLecturer = async (id, teacherId, callback) => {
+        return db.ref().remove(`/courses/${id}/lecturers/${teacherId}`, callback)
+    }
+
+
+    static getReference = async (id, data, callback) => {
+        return 
+    }
+
+    static addReference = async (id, data, callback) => {
+        var newKey = await db.ref(`/courses/${id}/references`).push().key;
+        var updates = {};
+        updates[`/courses/${id}/references/${newKey}`] = data
+        return db.ref().update(updates, callback)
+    }
+
+    static updateReference = async (id, referenceId, data, callback) => {
+        await db.ref(`/courses/${id}/references/${referenceId}`).update(data, callback)
+    }
+
+    static removeReference = async (id, referenceId, callback) => {
+       return await db.ref(`/courses/${id}/references/${referenceId}`).remove(callback)
     }
 }
 

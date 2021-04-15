@@ -1,47 +1,40 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, useHistory } from 'react-router-dom';
 import DashboardContainer from '../../components/DashboardContainer';
-import Classes from './Classes';
-import Courses from './Courses';
-import Students from './Students';
-import Teachers from './Teachers';
+import { auth } from '../../services/firebase';
+import CourseDetail from './CourseDetail';
+import Enrolment from './Enrolment';
+import MyCourses from './MyCourses';
 
 
 
 
 
 export default function TeacherDashboard(){
+    const history = useHistory()
     return <DashboardContainer 
-        header='Admin'
+        onLogout={async () => {
+            await auth.signOut();
+            history.replace('/')
+        }}
+        header='Teachers'
         items={[
             {
-                title:"Classes",
-                itemId:"/admin-dashboard/classes",
-                route:"/admin-dashboard/classes",
+                title:"My courses",
+                itemId:"/teacher-dashboard/courses",
+                route:"/teacher-dashboard/courses",
             },
-            {
-                title:"Students",
-                itemId:"/admin-dashboard/students",
-                route:"/admin-dashboard/students",
-            },
-            {
-                title:"Teachers",
-                itemId:"/admin-dashboard/teachers",
-                route:"/admin-dashboard/teachers",
-            },
-            {
-                title:"Courses",
-                itemId:"/admin-dashboard/courses",
-                route:"/admin-dashboard/courses",
-            },
+            // {
+            //     title:"Enrolment",
+            //     itemId:"/teacher-dashboard/enrolment",
+            //     route:"/teacher-dashboard/enrolment",
+            // },
             
         ]}
     >
         <Switch>
-            <Route  path='/admin-dashboard/classes' component={Classes} />
-            <Route  path='/admin-dashboard/students' component={Students} />
-            <Route  path='/admin-dashboard/courses' component={Courses} />
-            <Route  path='/admin-dashboard/teachers' component={Teachers} />
+            <Route exact path='/teacher-dashboard/courses' component={MyCourses} />
+            <Route exact path='/teacher-dashboard/courses/:id' component={CourseDetail} />
         </Switch>
     </DashboardContainer>
 }

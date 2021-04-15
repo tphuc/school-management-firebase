@@ -7,6 +7,7 @@ import Home from './pages/Home';
 import AdminDashboard from './pages/AdminDashboard';
 import { GeistProvider, CssBaseline } from '@geist-ui/react'
 import StudentDashoard from './pages/StudentDashboard';
+import TeacherDashboard from './pages/TeacherDashboard';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
       <Route exact path='/' component={Home} />
       <Route path='/admin-dashboard' component={AdminDashboard} />
       <Route path='/student-dashboard' component={StudentDashoard} />
+      <Route path='/teacher-dashboard' component={TeacherDashboard} />
       </Switch>
       
     </BrowserRouter>
