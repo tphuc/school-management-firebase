@@ -99,14 +99,48 @@ function Courses() {
     }
 
     const onSelect = async (row) => {
-        let res = await CourseService.getById(row.id);
-        setData(prev => ({ ...prev, selected: res.val() }));
+        fetchSelectedData(row?.id)
+    }
+
+    const fetchSelectedData = async (id) => {
+        let res = await CourseService.getById(id);
+        setData(prev => ({ ...prev, selected: {
+            id: id,
+            ...res.val()
+        } }));
     }
 
     // ----- Course Info -----
+    const removeStudent = async (row) => {
+        let res = await CourseService.removeStudent(data?.selected?.id, row?.id, async (err) => {
+            if(!err){
+                let res2 = await StudentService.removeEnrolCourse(row?.id, data?.selected?.id, e => {
+
+                })
+
+            }
+        })
+
+        fetchSelectedData(data?.selected?.id)
+    }
+
+    const removeTeacher = async (row) => {
+        let res = await CourseService.removeLecturer(data?.selected?.id, row?.id, async (err) => {
+            if(!err){
+                let res2 = await TeacherService.removeEnrolCourse(row?.id, data?.selected?.id, e => {
+
+                })
+
+            }
+        })
+
+        fetchSelectedData(data?.selected?.id)
+    }
+
     const addStudents = async () => {
         let students = [...form.students];
         const res = await Promise.all(students.map(async (student) => {
+            console.log(data?.selected?.id, student?.id)
             let courseRes = await CourseService.addStudent(data?.selected?.id, student?.id, student, err => {
                 if (err) {
                     return;
@@ -114,13 +148,14 @@ function Courses() {
                 else {
                     let { operation, ...others } = data.selected;
                     // console.log(student.id, data?.selected?.id, data?.selected);
-                    StudentService.addEnrolCourse(student.id, data?.selected?.id, others, err => console.log(err?.message))
+                    StudentService.addEnrolCourse(student?.id, data?.selected?.id, others, err => console.log(err?.message))
                 }
             })
 
 
         }))
         fetchData();
+        fetchSelectedData(data?.selected?.id)
         setForm({
             students: []
         })
@@ -136,13 +171,14 @@ function Courses() {
                 else {
                     let { operation, ...others } = data.selected;
                     // console.log(teacher.id, data?.selected?.id, data?.selected);
-                    TeacherService.addEnrolCourse(teacher.id, data?.selected?.id, others, err => console.log(err?.message))
+                    TeacherService.addEnrolCourse(teacher?.id, data?.selected?.id, others, err => console.log(err?.message))
                 }
             })
 
 
         }))
         fetchData();
+        fetchSelectedData(data?.selected?.id)
         setForm({
             students: []
         })
@@ -192,7 +228,7 @@ function Courses() {
                         <Spacer y={0.4} />
                         <Table data={parseTableData(JsonToList(data?.selected?.student_enrolment), (action, data) => {
                             if (action == 'remove') {
-
+                                removeStudent(data)
                             }
                         })} onRow={(row) => { }}>
                             <Table.Column prop="code" label="code" />
@@ -216,7 +252,7 @@ function Courses() {
                         <Spacer y={0.4} />
                         <Table data={parseTableData(JsonToList(data?.selected?.lecturers), (action, data) => {
                             if (action == 'remove') {
-
+                                removeTeacher(data)
                             }
                         })} onRow={(row) => { }}>
                             <Table.Column prop="code" label="code" />

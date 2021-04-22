@@ -52,6 +52,10 @@ class StudentService {
         updates[`/students/${id}/course_enrolment/${courseId}`] = data;
         return db.ref().update(updates, callback)
     }
+    
+    static removeEnrolCourse = async (id, courseID, callback) => {
+        return db.ref(`/students/${id}/course_enrolment/${courseID}`).remove(callback)
+    }
 }
 
 class TeacherService {
@@ -77,9 +81,11 @@ class TeacherService {
         var updates = {}
         updates[`/teachers/${id}/course_enrolment/${courseId}`] = data;
         return db.ref().update(updates, callback)
-    }
+    }    
 
-    
+    static removeEnrolCourse = async (id, courseID, callback) => {
+        return db.ref(`/teachers/${id}/course_enrolment/${courseID}`).remove(callback)
+    }
 }
 
 class CourseService {
@@ -110,8 +116,8 @@ class CourseService {
         return db.ref().update(updates, callback)
     }
 
-    static removeStudent = async (id, teacherId, callback) => {
-        return db.ref().remove(`/courses/${id}/student_enrolment/${teacherId}`, callback)
+    static removeStudent = async (id, studentId, callback) => {
+        return db.ref(`/courses/${id}/student_enrolment/${studentId}`).remove(callback)
     }
 
     static getEnroledStudents = async (id) => {
@@ -125,7 +131,7 @@ class CourseService {
     }
 
     static removeLecturer = async (id, teacherId, callback) => {
-        return db.ref().remove(`/courses/${id}/lecturers/${teacherId}`, callback)
+        return db.ref(`/courses/${id}/lecturers/${teacherId}`).remove(callback)
     }
 
 
