@@ -1,0 +1,23 @@
+#score table {
+    border-collapse: collapse;
+  }
+  #score tr{
+    border: 1px solid #ddd;
+  }
+  #score td {
+    border: 1px solid #ddd;
+      padding-left: 10px;
+      padding-right: 10px;
+  }
+#score th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    padding-left: 10px;
+    text-align: left;
+    border:1px solid #aaa;
+  }
+  #score th {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  tr:nth-child(even){background-color: #fdfdfd;}

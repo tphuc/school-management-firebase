@@ -25,7 +25,7 @@ function MyCourses() {
     const fetchData = async () => {
         console.log(auth?.currentUser?.uid)
         let res = await StudentService.getEnrolCourse(auth?.currentUser?.uid);
-        console.log(res.val())
+        console.log(JsonToList(res.val()))
         setData(prev => ({
             ...prev,
             courses: JsonToList(res.val())
@@ -45,11 +45,11 @@ function MyCourses() {
 
             <br />
             <Spacer y={1} />
-            {data.courses.map(item => <Card>
+            {data?.courses?.map(item => <Card>
                 <Card.Content>
-                    <Text b>{item.name}</Text>
+                    <Text b>{item?.name}</Text>
                     <br/>
-                    <Text >{item.code}</Text>
+                    <Text >{item?.code}</Text>
                     <br/>
                     <Button size='small'  type='secondary-light' block onClick={() => history.push(`/student-dashboard/courses/${item.id}`)}>View</Button>
                 </Card.Content>

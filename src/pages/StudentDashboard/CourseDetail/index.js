@@ -25,10 +25,10 @@ function CourseDetail() {
     const fetchData = async () => {
         console.log(getEndpoint(history.location.pathname))
         let res = await CourseService.getById(getEndpoint(history.location.pathname))
-        console.log(res.val())
+        console.log(auth?.currentUser?.uid)
         setData(prev => ({
             ...prev,
-            course: res.val()
+            course: res.val(),
         }))
     }
 
@@ -49,15 +49,35 @@ function CourseDetail() {
             <Tabs.Item label="Overview" value="1">
                 <Text h3>{data.course?.name}</Text>
                 <Text b>{data.course?.code}</Text>
-                <Text>{JsonToList(data.course?.student_enrolment).length} students</Text>
+                <Text>{JsonToList(data.course?.student_enrolment)?.length} students</Text>
                 <br/>
                 <Text b> References </Text>
                 {
-                    JsonToList(data.course?.references).map(item => <Text>{item}</Text>)
+                    JsonToList(data.course?.references).map(item => <>
+                    <Text>{item?.content}</Text>
+                    <br/>
+                    </>)
+                }
+            </Tabs.Item>
+            <Tabs.Item label="Students" value="students">
+                <Text b>Students</Text>
+                {
+                    JsonToList(data.course?.student_enrolment).map(item => <>
+                    <Text>{item?.code} {item?.name}</Text>
+                    {/* <br/> */}
+                    </>)
+                }
+                <hr/>
+                <Text b>Lecturer</Text>
+                {
+                     JsonToList(data.course?.lecturers).map(item => <>
+                        <Text>{item?.code} {item?.name}</Text>
+                        {/* <br/> */}
+                        </>)
                 }
             </Tabs.Item>
             <Tabs.Item label="Score" value="2">
-
+                <Text size="2em">{data.course?.student_enrolment?.[auth.currentUser.uid]?.score}</Text>
             </Tabs.Item>
             </Tabs>
 

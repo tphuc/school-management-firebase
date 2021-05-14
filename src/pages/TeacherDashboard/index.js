@@ -9,7 +9,6 @@ import MyCourses from './MyCourses';
 
 
 
-
 export default function TeacherDashboard(){
     const history = useHistory()
     return <DashboardContainer 

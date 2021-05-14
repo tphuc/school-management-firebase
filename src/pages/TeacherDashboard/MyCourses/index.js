@@ -46,7 +46,7 @@ function MyCourses() {
         <div >
             <br />
             <Spacer y={1} />
-            {data.courses.map(item => <Card>
+            {data.courses.map(item => <Card style={{marginBottom:10}}>
                 <Card.Content>
                     <Text b>{item.name}</Text>
                     <br/>

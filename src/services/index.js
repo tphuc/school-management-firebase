@@ -56,6 +56,10 @@ class StudentService {
     static removeEnrolCourse = async (id, courseID, callback) => {
         return db.ref(`/students/${id}/course_enrolment/${courseID}`).remove(callback)
     }
+
+    static updateCourseScore = async (id, courseId, data, callback) => {
+        return db.ref(`/students/${id}/course_enrolment/${courseId}/score`).set(data, callback)
+    }
 }
 
 class TeacherService {
@@ -152,6 +156,10 @@ class CourseService {
 
     static removeReference = async (id, referenceId, callback) => {
        return await db.ref(`/courses/${id}/references/${referenceId}`).remove(callback)
+    }
+
+    static updateStudentScore = async (id, studentId, data, callback) => {
+        await db.ref(`/courses/${id}/student_enrolment/${studentId}/score`).set(data, callback)
     }
 }
 
